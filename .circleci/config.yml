@@ -1,87 +1,19 @@
 version: 2.1
 orbs:
-  poetry: frameio/poetry@0.22.0
-description: Run poetry install.
+  poetry: frameio/poetry@0.15.0
 executor:
   name: python
-  tag: << parameters.python_version >>
-parameters:
-  after_install:
-    default: []
-    description: Optional steps to run after install.
-    type: steps
-  attach_workspace:
-    default: false
-    description: >
-      Boolean for whether or not to attach to an existing workspace. Default is
-      false.
-    type: boolean
-  before_install:
-    default: []
-    description: Optional steps to run before install.
-    type: steps
-  checkout:
-    default: true
-    description: Boolean for whether or not to checkout as a first step. Default is true.
-    type: boolean
-  cwd:
-    default: ./saw-script/saw-remote-api/python/
-    description: change directory where poetry executes
-    type: string
-  persist_to_workspace:
-    default: true
-    description: Should this job persist files to a workspace? Defaults to true
-    type: boolean
-  python_version:
-    default: '3.9'
-    description: >
-      The python version to use.
-
-      For a full list of releases, see the following:
-      https://hub.docker.com/r/cimg/python.
-    type: string
-  use_cache:
-    default: true
-    description: |
-      Boolean for whether or not to use circleci caching for dependencies.
-    type: boolean
-  workspace_path:
-    default: .
-    description: >
-      Path of the workspace to persist to relative to workspace_root. Defaults
-      to '.'
-    type: string
-  workspace_root:
-    default: .
-    description: >
-      Workspace root path that is either an absolute path or a path relative to
-      the working directory. Defaults to '.' (the working directory)
-    type: string
-steps:
-  - when:
-      condition: <<parameters.checkout>>
-      steps:
-        - checkout
-  - when:
-      condition: << parameters.attach_workspace >>
-      steps:
-        - attach_workspace:
-            at: << parameters.workspace_root >>
-  - when:
-      condition: <<parameters.before_install>>
-      name: Poetry - Run before_install steps
-      steps: <<parameters.before_install>>
-  - install:
-      cwd: << parameters.cwd >>
-      use_cache: <<parameters.use_cache>>
-  - when:
-      condition: <<parameters.after_install>>
-      name: Poetry - Run after_install steps
-      steps: <<parameters.after_install>>
-  - when:
-      condition: << parameters.persist_to_workspace >>
-      steps:
-        - persist_to_workspace:
-            paths:
-              - << parameters.workspace_path >>
-            root: << parameters.workspace_root >>
+  tag: 3.8
+workflows:
+  ci:
+    jobs:
+      - poetry/build:
+          cwd: ./saw-script/saw-remote-api/python/.
+      - poetry/shell:
+          args: pylint ./saw-script/saw-remote-api/python/.
+          requires:
+            - poetry/build
+      - poetry/install:
+          cwd: ./saw-script/saw-remote-api/python/.
+          requires:
+            - poetry/build
