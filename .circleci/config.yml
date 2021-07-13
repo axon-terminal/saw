@@ -1,3 +1,6 @@
+version: 2.1
+orbs:
+  poetry: frameio/poetry@0.22.0
 description: Run poetry install.
 executor:
   name: python
