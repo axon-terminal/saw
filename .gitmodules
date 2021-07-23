@@ -1,0 +1,3 @@
+[submodule "saw-script"]
+	path = saw-script
+	url = https://github.com/GaloisInc/saw-script.git
