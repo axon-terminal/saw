@@ -1,3 +1,9 @@
 [submodule "saw-script"]
 	path = saw-script
 	url = https://github.com/GaloisInc/saw-script.git
+[submodule "solvers"]
+	path = solvers
+	url = https://github.com/axon-terminal/solvers
+[submodule "cryptol"]
+	path = cryptol
+	url = https://github.com/galoisinc/cryptol
