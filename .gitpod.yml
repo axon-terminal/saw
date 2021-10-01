@@ -4,7 +4,9 @@ vscode:
   extensions:
     - haskell.haskell
     - justusadam.language-haskell
+    - bazelbuild.vscode-bazel
 tasks:
+  - command: go get github.com/bazelbuild/buildtools/buildifier
   - name: TCP Tunnel
     command: chisel server --socks5
   - name: SSH Server
